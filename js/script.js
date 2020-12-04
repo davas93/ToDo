@@ -11,7 +11,7 @@ const render = function () {
   todoList.textContent = "";
   todoCompleted.textContent = "";
 
-  todoData.forEach(function (item) {
+  todoData.forEach(function (item, index) {
     const li = document.createElement("li");
     li.classList.add("todo-item");
 
@@ -35,6 +35,7 @@ const render = function () {
 
     todoRemoveBtn.addEventListener("click", function () {
       li.remove();
+      todoData.splice(index, 1);
     });
 
     todoCompleteBtn.addEventListener("click", function () {
@@ -56,6 +57,7 @@ todoControl.addEventListener("submit", function (event) {
 
   headerInput.value = "";
 
+  console.log(todoData);
   render();
 });
 
