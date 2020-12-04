@@ -42,6 +42,7 @@ const render = function () {
     todoRemoveBtn.addEventListener("click", function () {
       li.remove();
       todoData.splice(index, 1);
+      render();
     });
 
     todoCompleteBtn.addEventListener("click", function () {
