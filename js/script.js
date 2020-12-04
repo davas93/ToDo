@@ -30,7 +30,12 @@ const render = function () {
       todoList.append(li);
     }
 
-    const todoCompleteBtn = li.querySelector(".todo-complete");
+    const todoCompleteBtn = li.querySelector(".todo-complete"),
+      todoRemoveBtn = li.querySelector(".todo-remove");
+
+    todoRemoveBtn.addEventListener("click", function () {
+      li.remove();
+    });
 
     todoCompleteBtn.addEventListener("click", function () {
       item.completed = !item.completed;
@@ -48,6 +53,8 @@ todoControl.addEventListener("submit", function (event) {
   };
 
   todoData.push(newTodo);
+
+  headerInput.value = "";
 
   render();
 });
