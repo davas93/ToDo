@@ -6,11 +6,18 @@ class ToDo {
 		this.input = document.querySelector(input);
 		this.toDoList = document.querySelector(toDoList);
 		this.toDoCompleted = document.querySelector(toDoCompleted);
-		this.toDoData = new Map();
+		this.toDoData = new Map(JSON.parse(localStorage.getItem('toDoList')));
+	}
+
+	addToStorage() {
+		localStorage.setItem('toDoList', JSON.stringify([...this.toDoData]));
 	}
 
 	render() {
+		this.toDoList.textContent = '';
+		this.toDoCompleted.textContent = '';
 		this.toDoData.forEach(this.createItem, this);
+		this.addToStorage();
 	}
 
 	createItem(toDo) {
@@ -54,6 +61,7 @@ class ToDo {
 
 	init() {
 		this.form.addEventListener('submit', this.addToDo.bind(this));
+		this.render();
 	}
 }
 
