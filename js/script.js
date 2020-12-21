@@ -90,10 +90,8 @@ class ToDo {
 
 			if (target.matches('.todo-remove')) {
 				this.deleteItem(key);
-				console.log('удалил');
 			} else if (target.matches('.todo-complete')) {
 				this.completedItem(key);
-				console.log('переместил');
 			} else {
 				return;
 			}
