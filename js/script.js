@@ -1,11 +1,12 @@
 'use strict';
 
 class ToDo {
-	constructor(form, input, toDoList, toDoCompleted) {
+	constructor(form, input, toDoList, toDoCompleted, toDoContainer) {
 		this.form = document.querySelector(form);
 		this.input = document.querySelector(input);
 		this.toDoList = document.querySelector(toDoList);
 		this.toDoCompleted = document.querySelector(toDoCompleted);
+		this.toDoContainer = document.querySelector(toDoContainer);
 		this.toDoData = new Map(JSON.parse(localStorage.getItem('toDoList')));
 	}
 
@@ -16,6 +17,7 @@ class ToDo {
 	render() {
 		this.toDoList.textContent = '';
 		this.toDoCompleted.textContent = '';
+		this.input.value = '';
 		this.toDoData.forEach(this.createItem, this);
 		this.addToStorage();
 	}
@@ -23,6 +25,7 @@ class ToDo {
 	createItem(toDo) {
 		const li = document.createElement('li');
 		li.classList.add('todo-item');
+		li.key = toDo.key;
 		li.insertAdjacentHTML(
 			'beforeend',
 			`<span class="text-todo">${toDo.value}</span>
@@ -49,6 +52,8 @@ class ToDo {
 			};
 			this.toDoData.set(newToDo.key, newToDo);
 			this.render();
+		} else {
+			alert('Заполните поле!');
 		}
 	}
 
@@ -59,9 +64,46 @@ class ToDo {
 		);
 	}
 
+	deleteItem(key) {
+		this.toDoData.forEach((item) => {
+			if (item.key === key) {
+				this.toDoData.delete(key);
+			}
+		});
+		this.render();
+	}
+
+	completedItem(key) {
+		this.toDoData.forEach((item) => {
+			if (item.key === key) {
+				this.toDoData.get(key).completed = !this.toDoData.get(key)
+					.completed;
+			}
+		});
+		this.render();
+	}
+
+	handler() {
+		this.toDoContainer.addEventListener('click', (event) => {
+			const target = event.target,
+				key = target.parentNode.parentNode.key;
+
+			if (target.matches('.todo-remove')) {
+				this.deleteItem(key);
+				console.log('удалил');
+			} else if (target.matches('.todo-complete')) {
+				this.completedItem(key);
+				console.log('переместил');
+			} else {
+				return;
+			}
+		});
+	}
+
 	init() {
 		this.form.addEventListener('submit', this.addToDo.bind(this));
 		this.render();
+		this.handler();
 	}
 }
 
@@ -69,7 +111,8 @@ const toDo = new ToDo(
 	'.todo-control',
 	'.header-input',
 	'.todo-list',
-	'.todo-completed'
+	'.todo-completed',
+	'.todo-container'
 );
 
 toDo.init();
